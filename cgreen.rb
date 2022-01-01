@@ -11,9 +11,9 @@ class Cgreen < Formula
     system "cmake", "-S", ".", "-B", "build", *std_cmake_args
     system "cmake", "--build", "build"
     bin.install "build/tools/cgreen-runner"
-    bin.install "build/tools/cgreen-debug"
+    bin.install "tools/cgreen-debug"
     include.install Dir["include/cgreen"]
-    lib.install "build/src/libcgreen*.so"
+    lib.install "build/src/libcgreen*.dylib"
     man1.install "doc/man/man1/cgreen-runner.1"
     man1.install "doc/man/man1/cgreen-debug.1"
     man5.install "doc/man/man5/cgreen.5"
