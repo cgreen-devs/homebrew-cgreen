@@ -10,22 +10,29 @@ class Cgreen < Formula
   def install
     system "cmake", "-S", ".", "-B", "build", *std_cmake_args
     system "cmake", "--build", "build"
-    system "cmake", "--install", "build"
+    bin.install "build/tools/cgreen-runner"
+    bin.install "build/tools/cgreen-debug"
+    include.install Dir["include/cgreen"]
+    lib.install "build/src/libcgreen*.so"
+    man1.install "doc/man/man1/cgreen-runner.1"
+    man1.install "doc/man/man1/cgreen-debug.1"
+    man5.install "doc/man/man5/cgreen.5"
+    # We should also install the completion scripts...
   end
 
   test do
     (testpath/"cgreen_tests.c").write <<~EOS
   #include <cgreen/cgreen.h>
   #include <cgreen/mocks.h>
-
+  
   Describe(Cgreen);
   BeforeEach(Cgreen){}
   AfterEach(Cgreen){}
-
+  
   static int mocked_function(char *string) {
       return (int)mock(string);
   }
-
+  
   Ensure(Cgreen, can_mock_a_simple_function) {
       expect(mocked_function, when(string, is_equal_to_string("Hello, Homebrew!")),
              will_return(42));
